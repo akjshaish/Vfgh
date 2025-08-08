@@ -1,0 +1,69 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      },
+      ".indexOn": ["email", "createdAt"]
+    },
+
+    "plans": {
+      ".read": true,
+      ".write": false
+    },
+    
+    "settings": {
+      ".write": false,
+      "advertisements": { ".read": true },
+      "maintenance": { ".read": true },
+      "security": { ".read": true },
+      "homepage": { ".read": true },
+      "legal": { ".read": true },
+      "domain": { ".read": "auth != null" },
+      "dns": { ".read": "auth != null" },
+      "smtp": { ".read": "auth != null" },
+      "gateways": { ".read": "auth != null" },
+      "invoice": { ".read": "auth != null" },
+      "restrictions": { ".read": "auth != null" }
+    },
+
+    "subdomains": {
+      "$subdomainId": {
+        ".read": "auth != null && data.child('userId').val() == auth.uid",
+        ".write": false 
+      },
+      ".indexOn": ["userId", "subdomain"]
+    },
+
+    "tickets": {
+      "$ticketId": {
+        ".read": "auth != null && data.child('userId').val() == auth.uid",
+        ".write": "auth != null && (!data.exists() || data.child('userId').val() == auth.uid)"
+      },
+       ".indexOn": ["userId"]
+    },
+    
+    "invoices": {
+      "$invoiceId": {
+        ".read": "auth != null && data.child('userId').val() == auth.uid",
+         ".write": false
+      },
+      ".indexOn": ["userId", "serviceId"]
+    },
+    
+    "auth_logs": {
+      ".read": false,
+      ".write": true,
+      ".indexOn": ["ip", "email"]
+    },
+
+    "pannelneed": {
+      ".read": false,
+      ".write": true
+    }
+  }
+}
